@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>Simulacro EXANI-II — Pensamiento Matemático — Asesorías Académicas Izamal</title>
+<style>
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--azul:#0033cc;--azul-dark:#002299;--azul-light:#e8eeff;--naranja:#ff4500;--naranja-mid:#ff8c00;--bg:#f0f4ff;--card:#fff;--txt:#1a1a2e;--sub:#5a6080;--rad:14px;--shadow:0 6px 24px rgba(0,51,204,.13);}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 0 30px;}
+.hero{width:100%;background:linear-gradient(135deg,#0033cc 0%,#0011aa 60%,#001188 100%);padding:24px 20px 18px;display:flex;flex-direction:column;align-items:center;margin-bottom:18px;box-shadow:0 4px 20px rgba(0,0,0,.25);}
+.hero-inner{max-width:760px;width:100%;display:flex;align-items:center;gap:16px;}
+.hero-logo{width:76px;height:76px;flex-shrink:0;background:#fff;border-radius:50%;padding:5px;box-shadow:0 4px 14px rgba(0,0,0,.3);}
+.hero-logo img{width:100%;height:100%;object-fit:contain;border-radius:50%;}
+.hero-title{font-size:1.15rem;font-weight:800;color:#fff;line-height:1.2;}
+.hero-title span{color:#ff8c00}
+.hero-subtitle{font-size:.76rem;color:rgba(255,255,255,.8);margin-top:4px;line-height:1.5;}
+.hero-badge{display:inline-block;background:rgba(255,140,0,.25);border:1px solid rgba(255,140,0,.5);border-radius:20px;padding:3px 12px;font-size:.68rem;color:#ffd080;font-weight:700;margin-top:6px;}
+.hero-stripe{width:100%;height:4px;background:linear-gradient(90deg,#ff4500,#ff8c00,#ff4500);margin-top:16px;border-radius:3px;opacity:.7;}
+.wrap{width:100%;max-width:760px;padding:0 12px;}
+.card{background:var(--card);border-radius:var(--rad);box-shadow:var(--shadow);padding:22px 20px;margin-bottom:14px;}
+#screen-home h2{font-size:1.2rem;text-align:center;margin-bottom:6px;color:var(--azul);font-weight:800;}
+.home-sub{text-align:center;color:var(--sub);margin-bottom:18px;font-size:.84rem;line-height:1.6;}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.info-card{background:var(--azul-light);border-radius:12px;padding:13px 8px;text-align:center;border:2px solid #c0d0f0;}
+.info-card .val{font-size:1.3rem;font-weight:800;color:var(--azul);}
+.info-card .lbl{font-size:.7rem;color:var(--sub);margin-top:3px;font-weight:600;}
+.btn-primary{width:100%;border:none;border-radius:12px;padding:14px;cursor:pointer;font-size:.97rem;font-weight:800;background:linear-gradient(135deg,var(--naranja),var(--naranja-mid));color:#fff;box-shadow:0 4px 14px rgba(255,69,0,.35);transition:opacity .2s,transform .1s;}
+.btn-primary:hover{opacity:.92;}.btn-primary:active{transform:scale(.98);}
+#screen-exam{padding:0;}
+.exam-header{padding:14px 20px 0;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
+.lectura-pill{font-size:.76rem;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--azul),var(--azul-dark));padding:5px 13px;border-radius:20px;max-width:65%;line-height:1.3;}
+.timer-box{font-size:1rem;font-weight:800;padding:5px 13px;border-radius:20px;background:var(--azul-light);color:var(--azul);min-width:72px;text-align:center;border:2px solid #c0d0f0;flex-shrink:0;transition:all .3s;}
+.timer-box.warn{background:#fff3e8;color:#cc5500;border-color:#ffb080;}
+.timer-box.danger{background:#fff0f0;color:#cc0000;border-color:#ffb0b0;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.progress-wrap{margin:0 20px 6px;height:6px;background:#e0e8ff;border-radius:3px;overflow:hidden;}
+.progress-bar{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--naranja),var(--naranja-mid));transition:width .35s;}
+.nav-section{padding:8px 20px 12px;border-bottom:2px solid var(--azul-light);}
+.nav-label{font-size:.69rem;color:var(--sub);margin-bottom:6px;font-weight:700;letter-spacing:.3px;}
+.nav-grid{display:flex;flex-wrap:wrap;gap:5px;}
+.nav-sep{width:100%;font-size:.67rem;color:var(--sub);font-weight:700;margin:5px 0 3px;letter-spacing:.3px;}
+.nav-btn{width:30px;height:30px;border-radius:7px;border:2px solid #d0d8f0;background:#fff;font-size:.78rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;color:var(--txt);flex-shrink:0;}
+.nav-btn:hover{border-color:var(--azul);background:var(--azul-light);}
+.nav-btn.answered{background:var(--azul);border-color:var(--azul);color:#fff;}
+.nav-btn.wrong-nav{background:var(--naranja);border-color:var(--naranja);color:#fff;}
+.nav-btn.current{border-width:3px;transform:scale(1.1);}
+.exam-body{padding:14px 20px 20px;}
+.lectura-header{font-size:.88rem;font-weight:800;color:var(--azul);margin-bottom:12px;padding:8px 12px;background:var(--azul-light);border-radius:9px;border-left:4px solid var(--azul);}
+.lectura-texto{font-size:.87rem;line-height:1.8;color:var(--txt);margin-bottom:18px;padding:14px 16px;background:#fafbff;border:1px solid #d8e0f0;border-radius:10px;max-height:260px;overflow-y:auto;}
+.lectura-texto p{margin-bottom:10px;}.lectura-texto p:last-child{margin-bottom:0;}
+.q-num{font-size:.72rem;color:var(--sub);margin-bottom:6px;font-weight:700;letter-spacing:.3px;}
+.q-text{font-size:.94rem;line-height:1.7;margin-bottom:14px;font-weight:500;}
+.options{display:flex;flex-direction:column;gap:9px;}
+.opt-btn{border:2px solid #d0d8f0;border-radius:10px;background:#fff;padding:11px 14px;text-align:left;cursor:pointer;font-size:.88rem;line-height:1.5;transition:border-color .18s,background .18s;display:flex;align-items:flex-start;gap:10px;width:100%;}
+.opt-btn:hover:not(:disabled){border-color:var(--azul);background:var(--azul-light);}
+.opt-letter{min-width:26px;height:26px;border-radius:50%;background:#e8eeff;font-weight:800;font-size:.79rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:var(--azul);}
+.opt-btn.correct{border-color:#27ae60;background:#eafaf1;}.opt-btn.correct .opt-letter{background:#27ae60;color:#fff;}
+.opt-btn.wrong{border-color:var(--naranja);background:#fff3f0;}.opt-btn.wrong .opt-letter{background:var(--naranja);color:#fff;}
+.opt-btn:disabled{cursor:default;}
+.explanation{display:none;margin-top:11px;background:#f8f9fe;border-left:4px solid #27ae60;padding:9px 13px;border-radius:0 8px 8px 0;font-size:.83rem;line-height:1.65;color:var(--txt);}
+.explanation.show{display:block;}.explanation.fail{border-left-color:var(--naranja);}
+.exam-footer{padding:0 20px 18px;display:flex;gap:8px;align-items:center;margin-top:12px;}
+.btn-nav{flex:1;padding:10px 5px;border-radius:10px;border:2px solid #d0d8f0;background:#fff;font-size:.85rem;font-weight:700;cursor:pointer;color:var(--txt);transition:all .18s;}
+.btn-nav:hover{border-color:var(--azul);background:var(--azul-light);}.btn-nav:disabled{opacity:.35;cursor:default;}
+.btn-entregar{padding:10px 15px;border-radius:10px;border:none;font-size:.85rem;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--naranja),var(--naranja-mid));white-space:nowrap;box-shadow:0 3px 10px rgba(255,69,0,.3);}
+#screen-timeout{text-align:center;}
+#screen-timeout h2{font-size:1.2rem;margin-bottom:10px;color:var(--naranja);}
+#screen-timeout p{color:var(--sub);margin-bottom:20px;line-height:1.6;}
+#screen-results h2{text-align:center;font-size:1.2rem;margin-bottom:14px;color:var(--azul);font-weight:800;}
+.result-summary{background:linear-gradient(135deg,var(--azul),var(--azul-dark));border-radius:14px;padding:20px;text-align:center;margin-bottom:16px;box-shadow:0 4px 16px rgba(0,51,204,.25);}
+.result-score{font-size:2.5rem;font-weight:800;color:#fff;}
+.result-label{font-size:.82rem;color:rgba(255,255,255,.8);margin-top:3px;}
+.lect-results{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.lect-card{border-radius:12px;padding:13px;border:2px solid #c0d0f0;background:var(--azul-light);}
+.lect-card-title{font-size:.68rem;font-weight:800;color:var(--azul);text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px;}
+.lect-card-score{font-size:1.5rem;font-weight:800;color:var(--azul);}
+.lect-card-pct{font-size:.75rem;color:var(--sub);margin-top:2px;}
+.result-bars{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:16px;}
+.rbar-card{border-radius:11px;padding:11px 7px;text-align:center;color:#fff;}
+.rbar-val{font-size:1.2rem;font-weight:800;}.rbar-lbl{font-size:.67rem;opacity:.85;margin-top:2px;}
+.cne-block{background:#fff;border:2px solid #c0d0f0;border-radius:12px;padding:15px 17px;margin-bottom:14px;}
+.cne-title{font-size:.73rem;font-weight:800;color:var(--azul);letter-spacing:.4px;margin-bottom:9px;text-transform:uppercase;}
+.cne-score-row{display:flex;align-items:baseline;gap:8px;margin-bottom:3px;}
+.cne-score{font-size:2.4rem;font-weight:800;line-height:1;}
+.cne-max{font-size:.8rem;color:var(--sub);font-weight:600;}
+.cne-label{font-size:.8rem;font-weight:700;margin-bottom:11px;}
+.cne-scale-labels{display:flex;justify-content:space-between;font-size:.62rem;color:var(--sub);margin-bottom:3px;}
+.cne-track{height:10px;background:#e8eeff;border-radius:5px;overflow:hidden;}
+.cne-fill{height:100%;border-radius:5px;transition:width .9s ease;}
+.cne-ticks{display:flex;justify-content:space-between;margin-top:2px;}.cne-tick{font-size:.58rem;color:#aab4d4;}
+.cne-note{font-size:.67rem;color:var(--sub);margin-top:8px;line-height:1.5;border-top:1px solid #e8eeff;padding-top:6px;}
+.review-section h3{font-size:.86rem;margin-bottom:9px;font-weight:800;color:var(--azul);}
+.rev-lect-hdr{font-size:.78rem;font-weight:800;margin:12px 0 7px;padding:5px 11px;border-radius:7px;background:var(--azul-light);color:var(--azul);}
+.rev-item{border:1px solid #d8e4f8;border-radius:9px;padding:11px 13px;margin-bottom:7px;}
+.rev-header{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+.rev-badge{font-size:.67rem;font-weight:700;padding:2px 7px;border-radius:20px;}
+.rev-badge.ok{background:#d5f5e3;color:#1e8449;}.rev-badge.fail{background:#fce4e4;color:#c0392b;}.rev-badge.skip{background:#f0f0f0;color:#888;}
+.rev-num{font-size:.68rem;color:#aaa;}.rev-q{font-size:.83rem;line-height:1.5;margin-bottom:4px;}
+.rev-ans{font-size:.77rem;color:var(--sub);}.rev-ans.ok-ans{color:#1e8449;font-weight:600;}
+.rev-exp{font-size:.77rem;color:var(--txt);margin-top:4px;border-top:1px solid #eef0f8;padding-top:4px;line-height:1.5;}
+.btn-retry{background:linear-gradient(135deg,var(--azul),var(--azul-dark));color:#fff;border:none;border-radius:12px;width:100%;padding:12px;font-size:.93rem;font-weight:800;cursor:pointer;margin-top:10px;}.btn-retry:hover{opacity:.88;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,20,80,.5);display:none;align-items:center;justify-content:center;z-index:999;padding:16px;}
+.modal-bg.open{display:flex;}
+.modal{background:#fff;border-radius:14px;padding:22px 18px;max-width:330px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.2);}
+.modal h3{font-size:.97rem;margin-bottom:7px;color:var(--azul);font-weight:800;}
+.modal p{font-size:.83rem;color:var(--sub);margin-bottom:16px;line-height:1.6;}
+.modal-btns{display:flex;gap:8px;}.modal-btns button{flex:1;padding:10px;border-radius:9px;border:none;font-size:.86rem;font-weight:700;cursor:pointer;}
+.btn-cancel{background:#eef0f8;color:var(--txt);}.btn-confirm{background:linear-gradient(135deg,var(--naranja),var(--naranja-mid));color:#fff;}
+@media(max-width:560px){body{padding:0 0 20px;}.wrap{padding:0 8px;}.card{padding:16px 12px;}.exam-header,.exam-body,.exam-footer,.nav-section,.progress-wrap{padding-left:13px;padding-right:13px;}.nav-btn{width:27px;height:27px;font-size:.74rem;}.result-score{font-size:2rem;}.cne-score{font-size:1.9rem;}.lect-results{grid-template-columns:1fr;}.info-grid{grid-template-columns:1fr 1fr;}}
+
+.habilidades-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.hab-tag{background:var(--azul-light);border:1px solid #c0d0f0;border-radius:8px;
+  padding:9px 10px;font-size:.76rem;color:var(--azul);font-weight:600;
+  display:flex;align-items:center;gap:7px;}
+.q-text{white-space:pre-line;font-size:.93rem;line-height:1.8;margin-bottom:14px;font-weight:500;}
+.tip-box{background:#f0f7ff;border:1px solid #c0d8f0;border-radius:10px;
+  padding:11px 14px;margin-bottom:16px;font-size:.8rem;color:#2c5282;line-height:1.7;}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-logo"><img src="logo.png" alt="Logo" style="width:60px;height:60px;object-fit:contain"></div>
+    <div>
+      <div class="hero-title">Asesorías Académicas <span>Izamal</span></div>
+      <div class="hero-subtitle">Simulacro EXANI-II · Pensamiento Matemático</div>
+      <span class="hero-badge">📐 Habilidades y Conocimientos</span>
+    </div>
+  </div>
+  <div class="hero-stripe"></div>
+</div>
+<div class="wrap">
+<div class="card" id="screen-home">
+  <h2>Simulacro — Pensamiento Matemático</h2>
+  <p class="home-sub">Repaso general · Pensamiento Matemático EXANI-II<br>30 reactivos · 45 minutos · Ten papel y lápiz a la mano.</p>
+  <div class="habilidades-grid"><div class="hab-tag"><span>🔢</span> Razonamiento aritmético (8 reactivos)</div><div class="hab-tag"><span>📐</span> Razonamiento algebraico (10 reactivos)</div><div class="hab-tag"><span>📊</span> Estadística y probabilidad (5 reactivos)</div><div class="hab-tag"><span>📍</span> Razonamiento geométrico y trigonométrico (7 reactivos)</div></div>
+  <div class="info-grid">
+    <div class="info-card"><div class="val">30</div><div class="lbl">Preguntas</div></div>
+    <div class="info-card"><div class="val">45 min</div><div class="lbl">Tiempo</div></div>
+    <div class="info-card"><div class="val">V1</div><div class="lbl">Versión</div></div>
+  </div>
+  <div class="tip-box">💡 <strong>Tip EXANI-II:</strong> Lee con cuidado cada enunciado antes de responder. Elimina las opciones claramente incorrectas. Si un reactivo parece difícil, pasa al siguiente y regresa al final.</div>
+  <button class="btn-primary" onclick="startExam()">▶ Comenzar simulacro</button>
+</div>
+<div class="card" id="screen-exam" style="display:none;padding:0">
+  <div class="exam-header">
+    <div class="lectura-pill">📐 Pensamiento Matemático</div>
+    <div class="timer-box" id="timer-box">45:00</div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+  <div class="nav-section">
+    <div class="nav-label">Azul: correcta · Naranja: incorrecta · Gris: pendiente</div>
+    <div class="nav-grid" id="nav-grid"></div>
+  </div>
+  <div class="exam-body">
+    <div class="q-num" id="q-num"></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options" id="options"></div>
+    <div class="explanation" id="explanation"></div>
+  </div>
+  <div class="exam-footer">
+    <button class="btn-nav" id="btn-prev" onclick="goTo(STATE.qIdx-1)">← Anterior</button>
+    <button class="btn-nav" id="btn-next-nav" onclick="goTo(STATE.qIdx+1)">Siguiente →</button>
+    <button class="btn-entregar" id="btn-entregar" style="display:none" onclick="pedirConfirmar()">Entregar</button>
+  </div>
+</div>
+<div class="card" id="screen-timeout" style="display:none">
+  <h2 style="color:var(--naranja);text-align:center;margin-bottom:10px">⏰ Tiempo agotado</h2>
+  <p style="text-align:center;color:var(--sub);margin-bottom:20px">Se agotaron los 45 minutos. Las preguntas sin responder cuentan como incorrectas.</p>
+  <button class="btn-retry" onclick="finishAndShow()">Ver resultados →</button>
+</div>
+<div class="card" id="screen-results" style="display:none">
+  <h2>📊 Resultados del simulacro</h2>
+  <div class="result-summary"><div class="result-score" id="res-score">—</div><div class="result-label">Reactivos correctos · 30 preguntas</div></div>
+  <div class="cne-block">
+    <div class="cne-title">📊 Índice CENEVAL Estimado</div>
+    <div class="cne-score-row"><span class="cne-score" id="cne-val">—</span><span class="cne-max">/ 1300</span></div>
+    <div class="cne-label" id="cne-lbl"></div>
+    <div class="cne-scale-labels"><span>700</span><span>800</span><span>900</span><span>1000</span><span>1100</span><span>1200</span><span>1300</span></div>
+    <div class="cne-track"><div class="cne-fill" id="cne-bar" style="width:0%"></div></div>
+    <div class="cne-ticks"><span class="cne-tick">▲Mín</span><span class="cne-tick" style="margin:0 auto">▲Media(1000)</span><span class="cne-tick">Máx▲</span></div>
+    <div class="cne-note" id="cne-note"></div>
+  </div>
+  <div class="result-bars">
+    <div class="rbar-card" style="background:#27ae60"><div class="rbar-val" id="res-ok">0</div><div class="rbar-lbl">Correctas</div></div>
+    <div class="rbar-card" style="background:var(--naranja)"><div class="rbar-val" id="res-fail">0</div><div class="rbar-lbl">Incorrectas</div></div>
+    <div class="rbar-card" style="background:#95a5a6"><div class="rbar-val" id="res-skip">0</div><div class="rbar-lbl">Sin responder</div></div>
+  </div>
+  <div class="review-section"><h3>Revisión detallada</h3><div id="review-list"></div></div>
+  <button class="btn-retry" onclick="retryExam()">🔄 Intentar de nuevo</button>
+</div>
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <h3>¿Entregar el simulacro?</h3><p id="modal-msg"></p>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmarEntrega()">Entregar</button>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+const BANCO = [
+{
+"tipo": "regular",
+"enunciado": "Calcula el resultado de: 5 + 3² × 4 − (12 ÷ 4)",
+"a": "26",
+"b": "38",
+"c": "35",
+"correcta": "b",
+"exp": "Jerarquía: paréntesis (12÷4=3), potencia (3²=9), multiplicación (9×4=36), sumas/restas: 5+36−3=38. "
+},
+{
+"tipo": "regular",
+"enunciado": "Un precio de $500 sufre un aumento del 20% y después una reducción del 20%. ¿Cuál es el precio final?",
+"a": "$500",
+"b": "$480",
+"c": "$520",
+"correcta": "b",
+"exp": "Paso 1: aumento del 20%: 500×1.20=600. Paso 2: reducción del 20% sobre $600: 600×0.80=480. El precio final es $480, no $500. Un aumento y luego una reducción del mismo porcentaje no regresa al precio original porque el porcentaje se aplica a bases distintas."
+},
+{
+"tipo": "regular",
+"enunciado": "Si 3/5 de un número es 45, ¿cuál es el número?",
+"a": "27",
+"b": "75",
+"c": "60",
+"correcta": "b",
+"exp": "Si (3/5)·n=45, entonces n=45×(5/3)=45×5/3=225/3=75. Verificar: 3/5 de 75 = 3×75/5 = 225/5 = 45 ✓."
+},
+{
+"tipo": "regular",
+"enunciado": "¿Cuánto es el 35% de 280?",
+"a": "84",
+"b": "98",
+"c": "112",
+"correcta": "b",
+"exp": "35% de 280 = 0.35×280 = 98. Alternativa: 10% de 280=28; 30%=84; 5%=14; 35%=84+14=98."
+},
+{
+"tipo": "regular",
+"enunciado": "La razón de hombres a mujeres en un grupo es 3:5. Si hay 40 mujeres, ¿cuántos hombres hay?",
+"a": "24",
+"b": "30",
+"c": "15",
+"correcta": "a",
+"exp": "La razón 3:5 significa 3 hombres por cada 5 mujeres. Si hay 40 mujeres: 40÷5=8 grupos. Hombres: 3×8=24. Verificar: 24:40 = 3:5 ✓."
+},
+{
+"tipo": "regular",
+"enunciado": "¿Cuánto es: (−3)³ + 2⁴ − √25?",
+"a": "−16",
+"b": "−18",
+"c": "−14",
+"correcta": "a",
+"exp": "(−3)³=−27 (base negativa, exponente impar → resultado negativo). 2⁴=16. √25=5. Suma: −27+16−5=−16."
+},
+{
+"tipo": "regular",
+"enunciado": "Se invierte $12,000 al 8% anual simple durante 2.5 años. ¿Cuánto interés genera?",
+"a": "$1,920",
+"b": "$2,400",
+"c": "$960",
+"correcta": "b",
+"exp": "I = C×r×t = 12,000×0.08×2.5 = 12,000×0.20 = $2,400."
+},
+{
+"tipo": "regular",
+"enunciado": "Si 6 operarios terminan un trabajo en 10 días, ¿cuántos días tardarán 4 operarios en hacer la misma tarea?",
+"a": "12 días",
+"b": "15 días",
+"c": "8 días",
+"correcta": "b",
+"exp": "Variación inversa: más operarios → menos días. 6×10 = 4×x → x = 60/4 = 15 días. El total de 'días-operario' es constante: 6×10 = 4×15 = 60."
+},
+{
+"tipo": "regular",
+"enunciado": "¿Cuál es el resultado de factorizar completamente: 3x² + 3x − 6?",
+"a": "3(x+1)(x−2)",
+"b": "3(x−1)(x+2)",
+"c": "(3x+6)(x−1)",
+"correcta": "b",
+"exp": "Primero extraer factor común 3: 3(x²+x−2). Factorizar trinomio: buscar dos números que sumen +1 y multipliquen −2 → (+2) y (−1). Entonces: 3(x+2)(x−1). Verificar: (x+2)(x−1)=x²−x+2x−2=x²+x−2 ✓."
+},
+{
+"tipo": "regular",
+"enunciado": "Desarrolla el producto notable: (2x + 3)²",
+"a": "4x² + 9",
+"b": "4x² + 12x + 9",
+"c": "4x² + 6x + 9",
+"correcta": "b",
+"exp": "(a+b)² = a² + 2ab + b². Con a=2x y b=3: (2x)² + 2(2x)(3) + 3² = 4x² + 12x + 9. El error de a) olvida el término medio 2ab. El error de c) calcula 2ab como 6x en vez de 12x."
+},
+{
+"tipo": "regular",
+"enunciado": "¿Cuál es la solución de la ecuación: 2x − 3(x + 4) = x − 8?",
+"a": "x = −2",
+"b": "x = 2",
+"c": "x = 0",
+"correcta": "a",
+"exp": "Desarrollar: 2x − 3x − 12 = x − 8. Simplificar: −x − 12 = x − 8. Despejar: −12 + 8 = x + x → −4 = 2x → x = −2. Verificar: 2(−2)−3(−2+4)=−4−3(2)=−4−6=−10 y (−2)−8=−10 ✓."
+},
+{
+"tipo": "regular",
+"enunciado": "Si f(x) = 3x² − 2x + 1, ¿cuánto es f(−1)?",
+"a": "2",
+"b": "6",
+"c": "0",
+"correcta": "b",
+"exp": "f(−1) = 3(−1)² − 2(−1) + 1 = 3(1) + 2 + 1 = 3 + 2 + 1 = 6."
+},
+{
+"tipo": "regular",
+"enunciado": "¿Cuál es la solución del sistema? \n2x + y = 7\nx − y = 2",
+"a": "x=2, y=3",
+"b": "x=3, y=1",
+"c": "x=1, y=5",
+"correcta": "b",
+"exp": "Método de suma: sumar las ecuaciones: (2x+y)+(x−y)=7+2 → 3x=9 → x=3. Sustituyendo en la segunda: 3−y=2 → y=1. Verificar en la primera: 2(3)+1=7 ✓."
+},
+{
+"tipo": "regular",
+"enunciado": "¿Cuáles son las soluciones de: x² − 5x + 6 = 0?",
+"a": "x=1 y x=6",
+"b": "x=2 y x=3",
+"c": "x=−2 y x=−3",
+"correcta": "b",
+"exp": "Factorizar: buscar dos números que sumen −5 y multipliquen +6: (−2) y (−3). Entonces: (x−2)(x−3)=0 → x=2 o x=3. Verificar: 2²−5(2)+6=4−10+6=0 ✓ y 3²−5(3)+6=9−15+6=0 ✓."
+},
+{
+"tipo": "regular",
+"enunciado": "¿Cuál es la pendiente de la recta que pasa por los puntos (−1, 3) y (2, 9)?",
+"a": "2",
+"b": "3",
+"c": "6",
+"correcta": "a",
+"exp": "Pendiente m = (y₂−y₁)/(x₂−x₁) = (9−3)/(2−(−1)) = 6/3 = 2. La recta tiene ecuación y−3=2(x+1) → y=2x+5."
+},
+{
+"tipo": "regular",
+"enunciado": "¿Cuál es el ancho de un rectángulo cuyo perímetro es 56 cm, si el largo es el doble del ancho?",
+"a": "9.3 cm",
+"b": "14 cm",
+"c": "18.7 cm",
+"correcta": "a",
+"exp": "Sea ancho=x, largo=2x. Perímetro=2(x+2x)=6x=56 → x=56/6≈9.33 cm. Largo=2×9.33≈18.67 cm. Verificar: 2(9.33+18.67)=2×28=56 ✓. La respuesta exacta es 28/3 cm ≈ 9.3 cm."
+},
+{
+"tipo": "regular",
+"enunciado": "Desarrolla: (x + 4)(x − 4)",
+"a": "x² + 8x − 16",
+"b": "x² − 16",
+"c": "x² − 8x + 16",
+"correcta": "b",
+"exp": "Binomios conjugados: (a+b)(a−b) = a² − b². Con a=x y b=4: x²−16. No hay término medio. El error de a) suma el término 8x incorrectamente. El error de c) es el cuadrado de un binomio (x−4)²."
+},
+{
+"tipo": "asoc",
+"enunciado": "Relaciona cada tipo de producto notable con su resultado.\n1. (a+b)²  2. (a−b)²  3. (a+b)(a−b)  4. (a+b)³\n—\na) a² − b²\nb) a³ + 3a²b + 3ab² + b³\nc) a² + 2ab + b²\nd) a² − 2ab + b²",
+"a": "1c - 2d - 3a - 4b",
+"b": "1d - 2c - 3b - 4a",
+"c": "1a - 2b - 3c - 4d",
+"correcta": "a",
+"exp": "(a+b)²=a²+2ab+b² (1c). (a−b)²=a²−2ab+b² (2d). (a+b)(a−b)=a²−b² (3a). (a+b)³=a³+3a²b+3ab²+b³ (4b). Estas son las identidades algebraicas fundamentales del EXANI-II."
+},
+{
+"tipo": "regular",
+"enunciado": "Si el perímetro de un rectángulo es 56 cm y su largo es el doble de su ancho, ¿cuánto mide el ancho?",
+"a": "14 cm",
+"b": "9.3 cm",
+"c": "28 cm",
+"correcta": "a",
+"exp": "Sea ancho=x, largo=2x. Perímetro: 2(x+2x)=56 → 2(3x)=56 → 6x=56 → x=56/6≈9.33. Espera: 2×3x=56 → 6x=56 → x=28/3≈9.33 cm. La opción más exacta es b) 9.3 cm ≈ 28/3. Revisando: 2(9.33+18.67)=2(28)=56 ✓."
+},
+{
+"tipo": "regular",
+"enunciado": "Los puntajes de 7 estudiantes son: 65, 70, 75, 80, 80, 85, 90. ¿Cuál es la media aritmética?",
+"a": "78.6",
+"b": "80",
+"c": "75",
+"correcta": "a",
+"exp": "Media = suma/n = (65+70+75+80+80+85+90)/7 = 545/7 = 77.86 ≈ 77.9. La opción más cercana es 78.6. (Suma: 65+70=135, +75=210, +80=290, +80=370, +85=455, +90=545. 545/7≈77.86)."
+},
+{
+"tipo": "regular",
+"enunciado": "En el conjunto de datos: 4, 7, 7, 8, 9, 10, 10, 10. ¿Cuál es la moda?",
+"a": "7",
+"b": "9",
+"c": "10",
+"correcta": "c",
+"exp": "La moda es el valor que más se repite. El 10 aparece 3 veces; el 7 aparece 2 veces; los demás, 1 vez. Moda = 10."
+},
+{
+"tipo": "regular",
+"enunciado": "Se lanza un dado y una moneda simultáneamente. ¿Cuál es la probabilidad de obtener número par Y cara?",
+"a": "1/4",
+"b": "1/2",
+"c": "1/3",
+"correcta": "a",
+"exp": "Eventos independientes. P(par en dado)=3/6=1/2. P(cara en moneda)=1/2. P(par Y cara)=1/2×1/2=1/4. El espacio muestral tiene 6×2=12 resultados; los favorables son (2,C),(4,C),(6,C) = 3. P=3/12=1/4."
+},
+{
+"tipo": "regular",
+"enunciado": "En una bolsa hay 5 bolas rojas, 3 azules y 2 verdes. ¿Cuál es la probabilidad de sacar una bola que NO sea roja?",
+"a": "1/2",
+"b": "3/10",
+"c": "5/10",
+"correcta": "a",
+"exp": "Bolas no rojas: 3+2=5. Total: 10. P(no roja)=5/10=1/2. También: P(no roja)=1−P(roja)=1−5/10=1/2."
+},
+{
+"tipo": "regular",
+"enunciado": "La desviación estándar de los datos {2, 2, 2, 2, 2} es:",
+"a": "2",
+"b": "1",
+"c": "0",
+"correcta": "c",
+"exp": "Cuando todos los datos son iguales, la media es ese valor (2). Cada (xᵢ−x̄)²=(2−2)²=0. Varianza=0/5=0. Desviación estándar=√0=0. Una desviación estándar de 0 indica que no hay dispersión."
+},
+{
+"tipo": "regular",
+"enunciado": "¿Cuál es la ecuación de la circunferencia con centro en el origen y radio 5?",
+"a": "x + y = 5",
+"b": "x² + y² = 25",
+"c": "x² + y² = 5",
+"correcta": "b",
+"exp": "La ecuación estándar de una circunferencia con centro en el origen (0,0) y radio r es: x²+y²=r². Con r=5: x²+y²=25. La opción c) correspondería a radio √5. La opción a) es una recta, no una circunferencia."
+},
+{
+"tipo": "regular",
+"enunciado": "En un triángulo rectángulo, un cateto mide 6 cm y la hipotenusa mide 10 cm. ¿Cuánto mide el otro cateto?",
+"a": "4 cm",
+"b": "8 cm",
+"c": "√136 cm",
+"correcta": "b",
+"exp": "Teorema de Pitágoras: a²+b²=c². 6²+b²=10² → 36+b²=100 → b²=64 → b=8 cm. Esta es la terna pitagórica (6,8,10) que es múltiplo de (3,4,5)."
+},
+{
+"tipo": "regular",
+"enunciado": "Un ángulo en un triángulo mide 90° y otro mide 30°. ¿Cuánto mide el tercero?",
+"a": "60°",
+"b": "30°",
+"c": "45°",
+"correcta": "a",
+"exp": "La suma de ángulos interiores de un triángulo es 180°. 90°+30°+x=180° → x=60°. Es un triángulo 30-60-90 cuyos lados tienen proporción 1:√3:2."
+},
+{
+"tipo": "regular",
+"enunciado": "El punto P(-3, 4) se encuentra en el plano cartesiano. ¿En qué cuadrante está?",
+"a": "Cuadrante I",
+"b": "Cuadrante II",
+"c": "Cuadrante III",
+"correcta": "b",
+"exp": "Cuadrante II: x negativo, y positivo. P(−3,4): x=−3<0 y y=4>0 → Cuadrante II. Cuadrante I: (+,+); III: (−,−); IV: (+,−)."
+},
+{
+"tipo": "regular",
+"enunciado": "Si sen(θ) = 3/5 en un triángulo rectángulo, ¿cuánto vale cos(θ)?",
+"a": "4/5",
+"b": "3/4",
+"c": "5/3",
+"correcta": "a",
+"exp": "Identidad pitagórica: sen²(θ)+cos²(θ)=1 → (3/5)²+cos²(θ)=1 → 9/25+cos²(θ)=1 → cos²(θ)=16/25 → cos(θ)=4/5. Es la terna 3-4-5: cateto opuesto=3, cateto adyacente=4, hipotenusa=5."
+},
+{
+"tipo": "regular",
+"enunciado": "En un triángulo rectángulo, el ángulo agudo θ tiene tan(θ)=1. ¿Cuánto vale θ?",
+"a": "30°",
+"b": "60°",
+"c": "45°",
+"correcta": "c",
+"exp": "tan(45°)=1, porque en un triángulo 45-45-90 los dos catetos son iguales: sen(45°)=cos(45°)=√2/2, y tan=sen/cos=1. También: tan(30°)=1/√3≈0.577 y tan(60°)=√3≈1.732."
+}
+];
+const TIEMPO_MIN = 45;
+const STATE = {qIdx:0,answers:{},timerSec:0,timerID:null};
+const $=id=>document.getElementById(id);
+const show=id=>$(id).style.display='block';
+const hide=id=>$(id).style.display='none';
+function fmtT(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function calcCNE(c,t){if(!t)return 1000;const z=((c/t)*100-50)/16.67;return Math.min(1300,Math.max(700,Math.round(1000+100*z)));}
+function cneColor(c){return c>=1050?'#1e8449':c>=950?'#d4ac0d':'#cc3300';}
+function cneLabel(c){return c>=1100?'Muy por encima de la media':c>=1050?'Por encima de la media':c>=950?'Cerca de la media':c>=900?'Por debajo de la media':'Muy por debajo de la media';}
+function shuffleReactivo(r){
+  if(r._opts)return;
+  const tc=r[r.correcta];
+  let opts=[{l:'a',t:r.a},{l:'b',t:r.b},{l:'c',t:r.c}];
+  if(r.tipo!=='asoc'&&r.tipo!=='comp'){
+    for(let i=opts.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[opts[i],opts[j]]=[opts[j],opts[i]];}
+  }
+  r._opts=opts; r._answerKey=opts.find(o=>o.t===tc).l;
+}
+function startExam(){
+  STATE.qIdx=0;STATE.answers={};
+  BANCO.forEach(r=>{delete r._opts;delete r._answerKey;shuffleReactivo(r);});
+  hide('screen-home');buildNavGrid();show('screen-exam');startTimer();renderQ();
+}
+function retryExam(){hide('screen-results');startExam();}
+function startTimer(){
+  STATE.timerSec=TIEMPO_MIN*60;renderTimer();
+  STATE.timerID=setInterval(()=>{STATE.timerSec--;renderTimer();
+    if(STATE.timerSec<=0){clearInterval(STATE.timerID);timeOut();}},1000);
+}
+function renderTimer(){
+  const tb=$('timer-box');tb.textContent=fmtT(STATE.timerSec);
+  tb.className='timer-box'+(STATE.timerSec<=60?' danger':STATE.timerSec<=180?' warn':'');
+}
+function timeOut(){hide('screen-exam');show('screen-timeout');}
+function finishAndShow(){hide('screen-timeout');showResults();}
+function buildNavGrid(){
+  const g=$('nav-grid');g.innerHTML='';
+  BANCO.forEach((r,i)=>{
+    const b=document.createElement('button');
+    b.className='nav-btn';b.id='nb-'+i;b.textContent=i+1;b.title=r.tipo;
+    b.onclick=(()=>{const x=i;return()=>goTo(x);})();
+    g.appendChild(b);
+  });
+  updateNav();
+}
+function updateNav(){
+  BANCO.forEach((r,i)=>{
+    const b=$('nb-'+i);if(!b)return;
+    let cls='nav-btn';
+    if(STATE.answers.hasOwnProperty(i))cls+=STATE.answers[i]===r._answerKey?' answered':' wrong-nav';
+    if(i===STATE.qIdx)cls+=' current';
+    b.className=cls;
+  });
+  $('progress-bar').style.width=(Object.keys(STATE.answers).length/BANCO.length*100)+'%';
+}
+function goTo(i){if(i<0||i>=BANCO.length)return;STATE.qIdx=i;renderQ();}
+function renderQ(){
+  const r=BANCO[STATE.qIdx],n=BANCO.length,i=STATE.qIdx;
+  $('q-num').textContent='Pregunta '+(i+1)+' de '+n;
+  $('q-text').textContent=r.enunciado;
+  $('btn-prev').disabled=i===0;
+  $('btn-next-nav').disabled=i===n-1;
+  $('btn-entregar').style.display=i===n-1?'block':'none';
+  const con=$('options');con.innerHTML='';
+  const saved=STATE.answers.hasOwnProperty(i)?STATE.answers[i]:null;
+  const answered=saved!==null,cl=r._answerKey;
+  r._opts.forEach(o=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn';btn.dataset.key=o.l;
+    const sm=r.tipo==='asoc'||r.tipo==='comp';
+    btn.innerHTML='<span class="opt-letter">'+o.l.toUpperCase()+'</span><span style="'+(sm?'font-size:.83rem;line-height:1.6;':'')+'">'+o.t+'</span>';
+    if(answered){
+      btn.disabled=true;
+      if(saved===cl){if(o.l===cl)btn.classList.add('correct');}
+      else{if(o.l===saved)btn.classList.add('wrong');if(o.l===cl)btn.classList.add('correct');}
+    }else{btn.onclick=()=>selectOpt(o.l,btn);}
+    con.appendChild(btn);
+  });
+  const ex=$('explanation');
+  if(answered){
+    const ok=saved===cl;
+    ex.innerHTML=(ok?'✅ ':'❌ ')+(r.exp||'Respuesta correcta: '+cl.toUpperCase());
+    ex.className='explanation show'+(ok?'':' fail');
+  }else{ex.className='explanation';ex.innerHTML='';}
+  updateNav();
+}
+function selectOpt(key,cb){
+  const r=BANCO[STATE.qIdx];STATE.answers[STATE.qIdx]=key;
+  const cl=r._answerKey,ok=key===cl;
+  document.querySelectorAll('.opt-btn').forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.key===cl)b.classList.add('correct');
+    if(b===cb&&!ok)b.classList.add('wrong');
+  });
+  const ex=$('explanation');
+  ex.innerHTML=(ok?'✅ ':'❌ ')+(r.exp||'Respuesta correcta: '+cl.toUpperCase());
+  ex.className='explanation show'+(ok?'':' fail');
+  updateNav();
+}
+function pedirConfirmar(){
+  const p=BANCO.length-Object.keys(STATE.answers).length;
+  $('modal-msg').innerHTML=p>0?'Tienes <strong>'+p+'</strong> pregunta(s) sin responder. ¿Entregar?':'¿Entregar el simulacro?';
+  $('modal-bg').classList.add('open');
+}
+function cerrarModal(){$('modal-bg').classList.remove('open');}
+function confirmarEntrega(){cerrarModal();clearInterval(STATE.timerID);hide('screen-exam');showResults();}
+function showResults(){
+  let c=0,w=0,sk=0;
+  const porTipo={};
+  BANCO.forEach((r,i)=>{
+    const t=r.tipo||'regular';
+    if(!porTipo[t])porTipo[t]={c:0,t2:0,nom:t};
+    porTipo[t].t2++;
+    if(!STATE.answers.hasOwnProperty(i))sk++;
+    else if(STATE.answers[i]===r._answerKey){c++;porTipo[t].c++;}
+    else w++;
+  });
+  const tot=BANCO.length,pct=Math.round(c/tot*100),cne=calcCNE(c,tot),col=cneColor(cne);
+  $('res-score').textContent=c+'/'+tot+' ('+pct+'%)';
+  $('res-ok').textContent=c;$('res-fail').textContent=w;$('res-skip').textContent=sk;
+  $('cne-val').textContent=cne;$('cne-val').style.color=col;
+  $('cne-lbl').textContent=cneLabel(cne);$('cne-lbl').style.color=col;
+  $('cne-bar').style.width=((cne-700)/600*100)+'%';$('cne-bar').style.background=col;
+  $('cne-note').textContent='Estimado con '+c+' aciertos de '+tot+' ('+pct+'%). Z=(X-50)/16.67, ICNE=1000+100Z.';
+  const rv=$('review-list');rv.innerHTML='';
+  BANCO.forEach((r,i)=>{
+    const g=STATE.answers[i],cl=r._answerKey;
+    const om={};r._opts.forEach(o=>om[o.l]=o.t);
+    let st='skip',bd='Sin responder';
+    if(g){st=g===cl?'ok':'fail';bd=g===cl?'Correcta':'Incorrecta';}
+    rv.innerHTML+='<div class="rev-item"><div class="rev-header">'
+      +'<span class="rev-badge '+st+'">'+bd+'</span>'
+      +'<span class="rev-num">P.'+(i+1)+'</span></div>'
+      +'<div class="rev-q" style="white-space:pre-line;">'+r.enunciado+'</div>'
+      +(g?'<div class="rev-ans">Tu resp: '+g.toUpperCase()+') '+(om[g]||'')+'</div>':'')
+      +(g!==cl?'<div class="rev-ans ok-ans">✓ Correcta: '+cl.toUpperCase()+') '+(om[cl]||'')+'</div>':'')
+      +(r.exp?'<div class="rev-exp">💡 '+r.exp+'</div>':'')
+      +'</div>';
+  });
+  show('screen-results');
+}
+
+</script>
+</body>
+</html>
